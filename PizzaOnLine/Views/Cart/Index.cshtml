@@ -1,0 +1,58 @@
+﻿@model PizzaOnLine.Models.CartIndexViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Ваша корзина</h2>
+<table width="90%" align="center">
+    <thead>
+        <tr>
+            <th align="center">Количество</th>
+            <th align="left">Наименование</th>
+            <th align="right">Цена</th>
+            <th align="right">Стоимость</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.Cart.Lines)
+        {
+            <tr>
+                <td align="center">@line.Quantity</td>
+                <td align="left">@line.Product.Name</td>
+                <td align="right">@line.Product.Price.ToString("c")</td>
+                <td align="right">@((line.Quantity * line.Product.Price).ToString("c"))</td>
+                <td align="right">
+                    @using (Html.BeginForm("RemoveFromCart", "Cart"))
+                    {
+                        @Html.Hidden("productId", line.Product.PizzaId)
+                        @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                        <input class="btn btn-default" type="submit" value="Удалить" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" align="right">Всего:</td>
+            <td align="right">
+                @Model.Cart.ComputeTotalValue().ToString("c")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<p align="center" class="actionButtons">
+    <a href="@Model.ReturnUrl">Продолжить покупки</a>
+</p>
+<p align="center" class="actionButtons">
+    @using (Html.BeginForm("CartClear", "Cart"))
+    {
+        <input class="btn btn-default" type="submit" value="Очистить корзину" />
+    }
+
+    @using (Html.BeginForm("AddOrder", "Cart"))
+    {
+        <input class="btn btn-default" type="submit" value="Заказать" />
+    }
+</p>

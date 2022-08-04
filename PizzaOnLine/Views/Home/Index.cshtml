@@ -1,0 +1,34 @@
+﻿@model PizzaOnLine.Models.Pizza
+@{
+    ViewBag.Title = "Пиццерия Don Salieri";
+}
+
+@foreach (PizzaOnLine.Models.Pizza p in ViewBag.Pizzas)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <h2>@p.Name</h2>
+            <img src="~/Content/@p.Image" />.
+            <p>
+                @p.Description
+            </p>
+            @using (Html.BeginForm("AddToCart", "Cart"))
+            {
+                @Html.Hidden("productId", p.PizzaId)
+                @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                <input class="btn btn-default" type="submit" value="+ Добавить в корзину" />
+            }
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>О нас</h2>
+        <p>
+            В нашей пиццерии вы всегда сможете заказать вкусную пиццу с доставкой на дом по выгодным ценам.
+        </p>
+    </div>
+    
+</div>
